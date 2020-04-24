@@ -214,3 +214,100 @@ console.log(map({name: "Иван", age: 17}, function(key, value){
     result[key+"_"] = value + "$";
     return result;
 }))
+
+//7
+function progress (a, d, n) {
+    let sum = 0;
+    sum += a;
+    a += d;
+    n--;
+    if (n > 0) {
+        sum += progress (a, d , n)
+    } 
+    return sum
+}
+console.log(progress(1, 2, 4))
+
+//8
+let body = {
+    tagName : "body",
+    tagProperty : "paired",
+    subTags : [
+        {
+            tagName : "div",
+            tagProperty : "paired",
+            subTags : [
+                {
+                    tagName : "span",
+                    tagProperty : "paired",
+                    text : "Enter a data please:",
+                },
+                {
+                    tagName : "br",
+                },
+                {
+                    tagName : "input",
+                    attrs : {
+                        type : "text",
+                        id : "name",
+                    },
+                },
+                {
+                    tagName : "input",
+                    attrs : {
+                        type : "text",
+                        id : "surname",
+                    },
+                },
+            ]
+        },
+        {
+            tagName : "div",
+            tagProperty : "paired",
+            subTags : [
+                {
+                    tagName : "button",
+                    tagProperty : "paired",
+                    attrs : {
+                        id : "ok"
+                    },
+                    text : "OK",
+                },
+                {
+                    tagName : "button",
+                    tagProperty : "paired",
+                    attrs : {
+                        id : "cancel"
+                    },
+                    text : "Cancel",
+                },
+            ]
+        }
+    ]
+}
+
+function createHtmlTree (objHtml, tag, attrs, text, subTags, tagProperty) {
+    var str1 ="";
+    str1 += `<${objHtml[tag]}`
+    if (attrs in objHtml) {
+        for (let i in objHtml[attrs]) {
+            str1 += ` ${i} = "${objHtml[attrs][i]}"`
+        }
+    }
+    str1 += `>\n`
+    if (text in objHtml) {
+        str1 += `${objHtml[text]}\n`
+    }
+        if (subTags in objHtml) {
+        for (let k in objHtml[subTags]) {
+            str1 += createHtmlTree(objHtml[subTags][k], tag, attrs, text, subTags, tagProperty)
+        }
+    }
+    if (tagProperty in objHtml) {
+        str1 += `</${objHtml[tag]}>\n`
+    }
+    return str1
+}
+
+console.log (createHtmlTree(body, "tagName", "attrs", "text", "subTags", "tagProperty"))
+document.write(createHtmlTree(body, "tagName", "attrs", "text", "subTags", "tagProperty"))
